@@ -2,29 +2,32 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 
-Route::redirect('/', 'loginPage');
-Route::get('loginPage', [AuthController::class, 'loginPage'])->name(
-    'auth#loginPage'
-);
-Route::get('registerPage', [AuthController::class, 'registerPage'])->name(
-    'auth#registerPage'
-);
+Route::middleware(['admin_auth'])->group(function () {
+    Route::redirect('/', 'loginPage');
+    Route::get('loginPage', [AuthController::class, 'loginPage'])->name(
+        'auth#loginPage'
+    );
+    Route::get('registerPage', [AuthController::class, 'registerPage'])->name(
+        'auth#registerPage'
+    );
+});
 
 Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
+    'auth',
+    // 'auth:sanctum',
+    // config('jetstream.auth_session'),
+    // 'verified',
 ])->group(function () {
     Route::get('dashboard', [AuthController::class, 'dashboard'])->name(
         'dashboard'
     );
 
-    // Category
-    Route::group(
-        ['prefix' => 'category', 'middleware' => 'admin_auth'],
-        function () {
+    Route::middleware(['admin_auth'])->group(function () {
+        // Category
+        Route::group(['prefix' => 'category'], function () {
             Route::get('list', [CategoryController::class, 'list'])->name(
                 'category#list'
             );
@@ -43,17 +46,44 @@ Route::middleware([
                 'delete',
             ])->name('category#delete');
 
-            Route::get('edit/{id}', [
-                CategoryController::class,
-                'edit',
-            ])->name('category#edit');
+            Route::get('edit/{id}', [CategoryController::class, 'edit'])->name(
+                'category#edit'
+            );
 
             Route::post('update/{id}', [
                 CategoryController::class,
                 'update',
             ])->name('category#update');
-        }
-    );
+        });
+        // Admin Password
+        Route::prefix('admin')->group(function () {
+            // Password
+            Route::get('password/changePage', [
+                AdminController::class,
+                'changePasswordPage',
+            ])->name('admin#changePasswordPage');
+
+            Route::post('password/change', [
+                AdminController::class,
+                'updatePassword',
+            ])->name('admin#updatePassword');
+
+            // Account
+            Route::get('account/details', [
+                AdminController::class,
+                'accountDetails',
+            ])->name('admin#accountDetails');
+            Route::get('account/edit', [
+                AdminController::class,
+                'accountEdit',
+            ])->name('admin#accountEdit');
+
+            Route::post('account/update/{id}', [
+                AdminController::class,
+                'accountUpdate',
+            ])->name('admin#accountUpdate');
+        });
+    });
 
     Route::group(
         ['prefix' => 'user', 'middleware' => 'user_auth'],

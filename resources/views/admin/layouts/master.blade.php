@@ -55,7 +55,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('category#list')}} ">
+                            <a href="{{ route('category#list') }} ">
                                 <i class="fas fa-list"></i>Category</a>
                         </li>
                         <li>
@@ -130,19 +130,29 @@
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="{{ asset('admin/images/icon/avatar-01.jpg') }}"
-                                                alt="John Doe" />
+                                            @if (Auth::user()->image != null)
+                                                <img src="{{ asset('storage/' . Auth::user()->image) }}">
+                                            @else
+                                                <img src="@if (Auth::user()->gender == 'male') {{ asset('images/default/default-user-male.png') }}
+                                                        @else
+                                                        {{ asset('images/default/default-user-female.jpg') }} @endif "
+                                                        alt="">
+                                            @endif
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn" href="#">Sithu</a>
+                                            <a class="js-acc-btn" href="#">{{ Auth::user()->name }}</a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
                                                 <div class="image">
-                                                    <a href="#">
-                                                        <img src="{{ asset('admin/images/icon/avatar-01.jpg') }}"
-                                                            alt="John Doe" />
-                                                    </a>
+                                                    @if (Auth::user()->image != null)
+                                                        <img src="{{ asset('storage/' . Auth::user()->image) }}">
+                                                    @else
+                                                        <img src="@if (Auth::user()->gender == 'male') {{ asset('images/default/default-user-male.png') }}
+                                                                    @else
+                                                                    {{ asset('images/default/default-user-female.jpg') }} @endif "
+                                                            alt="">
+                                                    @endif
                                                 </div>
                                                 <div class="content">
                                                     <h5 class="name">
@@ -153,15 +163,20 @@
                                             </div>
                                             <div class="account-dropdown__body">
                                                 <div class="account-dropdown__item">
-                                                    <a href="#">
+                                                    <a href="{{ route('admin#accountDetails') }}">
                                                         <i class="zmdi zmdi-account"></i>Account</a>
+                                                </div>
+
+                                                <div class="account-dropdown__item">
+                                                    <a href="{{ route('admin#changePasswordPage') }}">
+                                                        <i class="zmdi zmdi-key"></i>Change Password</a>
                                                 </div>
                                             </div>
                                             <div class="account-dropdown__footer">
                                                 <form action="{{ route('logout') }}" method="POST">
                                                     @csrf
                                                     <button class="btn btn-dark py-2 col-12">
-                                                        <i class="zmdi zmdi-power"></i>Logout
+                                                        <i class="zmdi zmdi-power m-2"></i>Logout
                                                     </button>
                                                 </form>
                                             </div>

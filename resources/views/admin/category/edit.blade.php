@@ -17,17 +17,18 @@
                                 <h3 class="text-center title-2">Category Edit Form</h3>
                             </div>
                             <hr>
-                            <form action="{{ route('category#update', $category->id) }}" method="post" novalidate="novalidate">
+                            <form action="{{ route('category#update', $category->id) }}" method="post"
+                                novalidate="novalidate">
                                 @csrf
                                 <div class="form-group">
-                                    <input type="hidden" name="categoryId" value="{{$category->id}}">
+                                    <input type="hidden" name="categoryId" value="{{ $category->id }}">
                                     <label for="categoryName" class="control-label mb-1">Name</label>
                                     <input id="categoryName" name="categoryName" type="text"
                                         class="form-control @error('categoryName')
                                         is-invalid
                                     @enderror"
                                         aria-required="true" aria-invalid="false" placeholder="Seafood..."
-                                        value="{{ old('categoryName',$category->name ) }}">
+                                        value="{{ old('categoryName', $category->name) }}">
                                     @error('categoryName')
                                         <small class="invalid-feedback">{{ $message }}</small>
                                     @enderror

@@ -86,9 +86,10 @@ class AdminController extends Controller
             }
             $fileName = uniqid(). $request->file('image')->getClientOriginalName();
             $request->file('image')->storeAs('public', $fileName);
+            $data['image'] = $fileName;
 
         }
-        $data['image'] = $fileName;
+
         User::where('id', $id)->update($data);
         return redirect()->route('admin#accountDetails')->with(['message' => 'Admin Account Updated..!']);
     }
@@ -100,6 +101,7 @@ class AdminController extends Controller
             'gender' => 'required',
             'phone' => 'required',
             'address' => 'required',
+            'image' => 'mimes:png,jpg,jpeg|file',
         ])->validate();
     }
 

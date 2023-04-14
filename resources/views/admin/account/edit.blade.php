@@ -40,6 +40,9 @@
                                             <div class="mt-4">
                                                 <input type="file" name="image" id="">
                                             </div>
+                                            @error('image')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">

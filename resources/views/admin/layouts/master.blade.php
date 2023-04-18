@@ -49,14 +49,18 @@
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
-                        <li class="active has-sub">
+                        {{-- <li class="active has-sub">
                             <a class="js-arrow" href="index.html">
                                 <i class="fas fa-tachometer-alt"></i>Home Page
                             </a>
-                        </li>
+                        </li> --}}
                         <li>
                             <a href="{{ route('category#list') }} ">
                                 <i class="fas fa-list"></i>Category</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('product#list') }} ">
+                                <i class="fas fa-list"></i>Products</a>
                         </li>
                         <li>
                             <a href="customerList.html">

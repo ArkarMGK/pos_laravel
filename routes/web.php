@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\User\UserController;
 
 Route::middleware(['admin_auth'])->group(function () {
     Route::redirect('/', 'loginPage');
@@ -84,6 +85,16 @@ Route::middleware([
                 AdminController::class,
                 'accountUpdate',
             ])->name('admin#accountUpdate');
+
+            // Account List
+            Route::get('list', [AdminController::class, 'list'])->name(
+                'admin#accountList'
+            );
+
+            // Delete account
+            Route::get('delete/{id}', [AdminController::class, 'delete'])->name(
+                'admin#accountDelete'
+            );
         });
 
         // Product
@@ -100,7 +111,6 @@ Route::middleware([
                 'product#store'
             );
 
-
             Route::get('show/{id}', [ProductController::class, 'show'])->name(
                 'product#show'
             );
@@ -109,9 +119,10 @@ Route::middleware([
                 'product#edit'
             );
 
-            Route::post('update/{id}', [ProductController::class, 'update'])->name(
-                'product#update'
-            );
+            Route::post('update/{id}', [
+                ProductController::class,
+                'update',
+            ])->name('product#update');
             Route::get('delete/{id}', [
                 ProductController::class,
                 'delete',
@@ -122,9 +133,7 @@ Route::middleware([
     Route::group(
         ['prefix' => 'user', 'middleware' => 'user_auth'],
         function () {
-            Route::get('home', function () {
-                return view('user.home');
-            })->name('user#home');
+            Route::get('home', [UserController::class, 'home'])->name('user#home');
         }
     );
 });

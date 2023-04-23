@@ -170,7 +170,10 @@
                                                     <a href="{{ route('admin#accountDetails') }}">
                                                         <i class="zmdi zmdi-account"></i>Account</a>
                                                 </div>
-
+                                                <div class="account-dropdown__item">
+                                                    <a href="{{ route('admin#accountList') }}">
+                                                        <i class="zmdi zmdi-accounts-list"></i>Admin List</a>
+                                                </div>
                                                 <div class="account-dropdown__item">
                                                     <a href="{{ route('admin#changePasswordPage') }}">
                                                         <i class="zmdi zmdi-key"></i>Change Password</a>

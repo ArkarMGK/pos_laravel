@@ -69,32 +69,57 @@ class AdminController extends Controller
         return view('admin.account.edit');
     }
 
+    public function delete($id)
+    {
+        User::where('id', $id)->delete();
+        return back()->with(['message' => 'Admin Account Deleted !']);
+    }
+    // admin List
+    public function list()
+    {
+        $users =
+            // = User::where('id', '!=', Auth::user()->id)
+            User::when(request('key'), function ($query) {
+                $query->where('name','like', '%'.request('key').'%')
+                ->orWhere('email','like', '%'.request('key').'%')
+                ->orWhere('address','like', '%'.request('key').'%')
+                ->orWhere('gender','like', '%'.request('key').'%')
+                ->orWhere('phone','like', '%'.request('key').'%');
+            })
+                ->where('role', 'admin')
+                ->paginate(2);
+        // dd($users->toArray());
+        return view('admin.account.list', compact('users'));
+    }
+
     // update Admin Account Info
     public function accountUpdate($id, Request $request)
     {
-
         $this->accountValidationCheck($request);
         $data = $this->getUserData($request);
         // for image
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             // $dbImage = User::where('id', $id)->first();
             // $dbImage = $dbImage->image;
 
             $dbImage = Auth::user()->image;
-            if($dbImage != null) {
-                Storage::delete('public/'.$dbImage);
+            if ($dbImage != null) {
+                Storage::delete('public/' . $dbImage);
             }
-            $fileName = uniqid(). $request->file('image')->getClientOriginalName();
+            $fileName =
+                uniqid() . $request->file('image')->getClientOriginalName();
             $request->file('image')->storeAs('public', $fileName);
             $data['image'] = $fileName;
-
         }
 
         User::where('id', $id)->update($data);
-        return redirect()->route('admin#accountDetails')->with(['message' => 'Admin Account Updated..!']);
+        return redirect()
+            ->route('admin#accountDetails')
+            ->with(['message' => 'Admin Account Updated..!']);
     }
 
-    private function accountValidationCheck($request){
+    private function accountValidationCheck($request)
+    {
         Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email',

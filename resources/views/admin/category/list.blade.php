@@ -55,7 +55,7 @@
                             </form>
                         </div>
                     </div>
-                    @if (count($categories))
+                    @if (count($categories) > 0)
                         <div class="table-responsive table-responsive-data2">
                             <table class="table table-data2">
                                 <thead>

@@ -24,7 +24,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="card-title">
-                                <h3 class="text-center title-2">Admin Change Password</h3>
+                                <h3 class="text-center title-2">User Change Change Password</h3>
                             </div>
                             <hr>
                             <form action="{{ route('admin#updatePassword') }}" method="post" novalidate="novalidate">
@@ -64,7 +64,7 @@
                                         class="form-control @error('confirmPassword')
                                         is-invalid
                                     @enderror"
-                                        aria-required="true" aria-invalid="false" placeholder="Enter confirm Password..." }}">
+                                        aria-required="true" aria-invalid="false" placeholder="Enter confirm Password...">
                                     @error('confirmPassword')
                                         <small class="invalid-feedback">{{ $message }}</small>
                                     @enderror

@@ -1,4 +1,4 @@
-@extends('admin.layouts.master')
+@extends('user.layouts.master')
 @section('title', 'Account-Edit')
 @section('content')
     <!-- MAIN CONTENT-->
@@ -20,10 +20,10 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title">
-                                    <h3 class="text-center title-2">Admin Details</h3>
+                                    <h3 class="text-center title-2">Account Details</h3>
                                 </div>
                                 <hr>
-                                <form action="{{ route('admin#accountUpdate', Auth::user()->id) }}" method="post"
+                                <form action="{{ route('user#accountUpdate', Auth::user()->id) }}" method="post"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">

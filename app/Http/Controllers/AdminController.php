@@ -58,6 +58,9 @@ class AdminController extends Controller
         ])->validate();
     }
 
+
+
+
     // direct admin Profile Details Page
     public function accountDetails()
     {
@@ -69,11 +72,14 @@ class AdminController extends Controller
         return view('admin.account.edit');
     }
 
+    // Delete Admin Account
     public function delete($id)
     {
         User::where('id', $id)->delete();
         return back()->with(['message' => 'Admin Account Deleted !']);
     }
+
+
     // admin List
     public function list()
     {

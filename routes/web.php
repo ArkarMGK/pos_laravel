@@ -1,10 +1,12 @@
 <?php
 
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\User\AjaxController;
 use App\Http\Controllers\User\UserController;
 
 Route::middleware(['admin_auth'])->group(function () {
@@ -133,7 +135,48 @@ Route::middleware([
     Route::group(
         ['prefix' => 'user', 'middleware' => 'user_auth'],
         function () {
-            Route::get('home', [UserController::class, 'home'])->name('user#home');
+            Route::get('home', [UserController::class, 'homePage'])->name(
+                'user#home'
+            );
+
+            Route::get('filter/{id}', [UserController::class, 'filter'])->name(
+                'user#filter'
+            );
+
+            // USER ACCOUNTS OPERATIONS
+            Route::get('password/change', [
+                UserController::class,
+                'changePasswordPage',
+            ])->name('user#changePasswordPage');
+
+            Route::post('password/change', [
+                UserController::class,
+                'updatePassword',
+            ])->name('user#updatePassword');
+
+            Route::get('account/edit', [
+                UserController::class,
+                'accountEditPage',
+            ])->name('user#accountEdit');
+
+            Route::post('account/update/{id}', [
+                UserController::class,
+                'updateAccount',
+            ])->name('user#accountUpdate');
+
+            Route::prefix('ajax')->group(function () {
+                Route::get('product/list', [
+                    AjaxController::class,
+                    'productList',
+                ])->name('ajax#productList');
+            });
+
+
+
+            Route::get('product/details/{id}', [
+                UserController::class,
+                'productDetails',
+            ])->name('user#productDetails');
         }
     );
 });

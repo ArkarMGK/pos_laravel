@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use Carbon\Carbon;
+use App\Models\Cart;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
@@ -20,7 +21,8 @@ class UserController extends Controller
     {
         $categories = Category::get();
         $products = Product::latest()->get();
-        return view('user.home', compact('products', 'categories'));
+        $carts   = Cart::where('user_id', Auth::user()->id)->get();
+        return view('user.home', compact('products', 'categories', 'carts'));
     }
 
     public function filter($categoryId)
@@ -35,11 +37,6 @@ class UserController extends Controller
         return view('user.account.changePassword');
     }
 
-    public function productDetails($id){
-        $product = Product::where('id',$id)->first();
-        $products = Product::get();
-        return view('user.product.details', compact('product', 'products'));
-    }
     public function updatePassword(Request $request)
     {
         $this->passwordValidationCheck($request);

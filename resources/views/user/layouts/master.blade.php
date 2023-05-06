@@ -43,14 +43,14 @@
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
                             <a href="{{ route('user#home') }}" class="nav-item nav-link active">Home</a>
-                            <a href="cart.html" class="nav-item nav-link">My Cart</a>
+                            <a href="{{ route('user#Cart') }}" class="nav-item nav-link">My Cart</a>
                             <a href="contact.html" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-                            <a href="" class="btn px-0 ml-3">
+                            <a href="{{ route('user#Cart') }}" class="btn px-0 ml-3">
                                 <i class="fas fa-shopping-cart text-primary"></i>
                                 <span class="badge text-secondary border border-secondary rounded-circle"
-                                    style="padding-bottom: 2px;">0</span>
+                                    style="padding-bottom: 2px;"></span>
                             </a>
                             <div class="dropdown d-inline px-4">
                                 <a class="btn btn-dark text-white dropdown-toggle" href="#" role="button"
@@ -163,7 +163,7 @@
                 </p>
             </div>
             <div class="col-md-6 px-xl-0 text-center text-md-right">
-                <img class="img-fluid" src="img/payments.png" alt="">
+                <img class="img-fluid" src="{{ asset('user/img/payments.png') }}" alt="">
             </div>
         </div>
     </div>
@@ -181,8 +181,8 @@
     <script src="{{ asset('user/lib/owlcarousel/owl.carousel.min.js') }}"></script>
 
     <!-- Contact Javascript File -->
-    <script src="{{ asset('user/mail/jqBootstrapValidation.min.js') }}"></script>
-    <script src="{{ asset('user/mail/contact.js') }}"></script>
+    {{-- <script src="{{ asset('user/mail/jqBootstrapValidation.min.js') }}"></script>
+    <script src="{{ asset('user/mail/contact.js') }}"></script> --}}
 
     <!-- Template Javascript -->
     <script src="{{ asset('user/js/main.js') }}"></script>

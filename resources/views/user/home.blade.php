@@ -7,13 +7,14 @@
         <div class="col-lg-3 col-md-4">
             <!-- Price Start -->
             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter
-                    by price</span></h5>
+                    by price</span>
+            </h5>
             <div class="bg-light p-4 mb-30">
                 <form>
                     <div class="d-flex align-items-center justify-content-between mb-3 bg-dark text-white px-4">
 
                         <label class="" for="price-all">
-                            <a href="{{route('user#home')}}">
+                            <a href="{{ route('user#home') }}">
                                 Category
                             </a>
                         </label>
@@ -22,7 +23,8 @@
 
                     @foreach ($categories as $category)
                         <div class="d-flex align-items-center justify-content-between mb-3">
-                            <a href="{{ route('user#filter', $category->id)}}" class="text-decoration-none" style="color:darkblue">
+                            <a href="{{ route('user#filter', $category->id) }}" class="text-decoration-none"
+                                style="color:darkblue">
                                 <label class="" for="price-all">{{ $category->name }}</label>
                             </a>
                         </div>
@@ -80,45 +82,47 @@
                         </div>
                     </div>
                 </div>
-                @if (count($products)>0)
-                <div id="productList" class="row">
-                    @foreach ($products as $product)
-                        <a href="">
-                            <div class="col-lg-4 pb-1">
-                                <div class="product-item bg-light mb-4">
-                                    <div class="product-img position-relative overflow-hidden">
-                                        <div style="height:400px;background-size: contain">
-                                            <img class="img-fluid w-100"
-                                            src="{{ asset('storage/images/product/' . $product->image) }}" alt="">
-                                        </div>
+                @if (count($products) > 0)
+                    <div id="productList" class="row">
+                        @foreach ($products as $product)
+                            <a href="">
+                                <div class="col-lg-4 pb-1">
+                                    <div class="product-item bg-light mb-4">
+                                        <div class="product-img position-relative overflow-hidden">
+                                            <div style="height:400px;background-size: contain">
+                                                <img class="img-fluid w-100"
+                                                    src="{{ asset('storage/images/product/' . $product->image) }}"
+                                                    alt="">
+                                            </div>
 
-                                        <div class="product-action">
-                                            <a class="btn btn-outline-dark btn-square" href=""><i
-                                                    class="fa fa-shopping-cart"></i></a>
-                                            <a class="btn btn-outline-dark btn-square" href="{{route('user#productDetails', $product->id)}}"><i
-                                                    class="fa fa-info-circle"></i></a>
+                                            <div class="product-action">
+                                                <a class="btn btn-outline-dark btn-square" href=""><i
+                                                        class="fa fa-shopping-cart"></i></a>
+                                                <a class="btn btn-outline-dark btn-square"
+                                                    href="{{ route('user#productDetails', $product->id) }}"><i
+                                                        class="fa fa-info-circle"></i></a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="text-center py-4">
-                                        <a class="h6 text-decoration-none text-truncate"
-                                            href="">{{ $product->name }}</a>
-                                        <div class="d-flex align-items-center justify-content-center mt-2">
-                                            <h5>{{ $product->price }} MMK</h5>
-                                            {{-- <h6 class="text-muted ml-2"><del>25000</del></h6> --}}
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-center mb-1">
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small class="fa fa-star text-primary mr-1"></small>
-                                            <small class="fa fa-star text-primary mr-1"></small>
+                                        <div class="text-center py-4">
+                                            <a class="h6 text-decoration-none text-truncate"
+                                                href="">{{ $product->name }}</a>
+                                            <div class="d-flex align-items-center justify-content-center mt-2">
+                                                <h5>{{ $product->price }} MMK</h5>
+                                                {{-- <h6 class="text-muted ml-2"><del>25000</del></h6> --}}
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-center mb-1">
+                                                <small class="fa fa-star text-primary mr-1"></small>
+                                                <small class="fa fa-star text-primary mr-1"></small>
+                                                <small class="fa fa-star text-primary mr-1"></small>
+                                                <small class="fa fa-star text-primary mr-1"></small>
+                                                <small class="fa fa-star text-primary mr-1"></small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
-                    @endforeach
-                </div>
+                            </a>
+                        @endforeach
+                    </div>
                 @else
                     <div class="col-12 mt-4 d-flex justify-content-center">
                         <h2 class="text-danger"> No Products Avaliable !</h2>
@@ -134,7 +138,7 @@
 
 @section('script')
     <script>
-        $(document).ready(function() {
+    $(document).ready(function() {
             // $.ajax({
             //     type: 'get',
             //     url: 'http://localhost:8000/user/ajax/productList',
@@ -196,7 +200,6 @@
 
                     }
                 })
-
 
             });
 

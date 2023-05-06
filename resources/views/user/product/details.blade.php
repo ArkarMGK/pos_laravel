@@ -17,6 +17,8 @@
             <div class="col-lg-7 h-auto mb-30">
                 <div class="h-100 bg-light p-30">
                     <h3>{{ $product->name }}</h3>
+                    <input type="hidden" id="userId" value={{ Auth::user()->id }}>
+                    <input type="hidden" id="productId" value={{ $product->id }}>
                     <div class="d-flex mb-3">
                         <div class="text-primary mr-2">
                             <small class="fas fa-star"></small>
@@ -36,14 +38,16 @@
                                     <i class="fa fa-minus"></i>
                                 </button>
                             </div>
-                            <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                            <input type="text" class="form-control bg-secondary border-0 text-center" value="1"
+                                id="orderCount">
                             <div class="input-group-btn">
                                 <button class="btn btn-primary btn-plus">
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </div>
                         </div>
-                        <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
+                        <button class="btn btn-primary px-3" id="addCartBtn" type="button"><i
+                                class="fa fa-shopping-cart mr-1"></i> Add To
                             Cart</button>
                     </div>
                     <div class="d-flex pt-2">
@@ -115,4 +119,34 @@
         </div>
     </div>
     <!-- Products End -->
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('#addCartBtn').click(function() {
+                $source = {
+                    'count': $('#orderCount').val(),
+                    'user_id': $('#userId').val(),
+                    'product_id': $('#productId').val(),
+                };
+
+                console.log($source);
+                $.ajax({
+                    type: 'get',
+                    url: 'http://localhost:8000/user/ajax/addToCart',
+                    data: $source,
+                    dataType: 'json',
+                    success: function(response) {
+                        if(response.status == 'success'){
+                            window.location.href = "http://localhost:8000/user/home";
+                        }
+                    }
+                })
+            })
+
+
+
+        })
+    </script>
 @endsection

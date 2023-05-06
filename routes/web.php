@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\User\AjaxController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\UserProductController;
 
 Route::middleware(['admin_auth'])->group(function () {
     Route::redirect('/', 'loginPage');
@@ -164,19 +165,29 @@ Route::middleware([
                 'updateAccount',
             ])->name('user#accountUpdate');
 
+            Route::prefix('product')->group(function () {
+                Route::get('details/{id}', [
+                    UserProductController::class,
+                    'productDetails',
+                ])->name('user#productDetails');
+
+                Route::get('cart', [
+                    UserProductController::class,
+                    'cartList',
+                ])->name('user#Cart');
+
+            });
+
             Route::prefix('ajax')->group(function () {
                 Route::get('product/list', [
                     AjaxController::class,
                     'productList',
                 ])->name('ajax#productList');
+
+                Route::get('addToCart', [AjaxController::class, 'addToCart'])->name(
+                    'ajax#addToCart'
+                );
             });
-
-
-
-            Route::get('product/details/{id}', [
-                UserController::class,
-                'productDetails',
-            ])->name('user#productDetails');
         }
     );
 });

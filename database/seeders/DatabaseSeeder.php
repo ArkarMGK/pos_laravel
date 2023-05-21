@@ -29,5 +29,18 @@ class DatabaseSeeder extends Seeder
             'gender' => 'male',
             'password' => Hash::make('andromeda')
         ]);
+
+        User::create([
+            'name' => 'testuser',
+            'email' => 'testuser@gmail.com',
+            'phone' => '09796789321',
+            'address' => 'MDY',
+            'role' => 'user',
+            'gender' => 'female',
+            'password' => Hash::make('andromeda')
+        ]);
+
+        \App\Models\User::factory(5)->create();
+
     }
 }

@@ -56,15 +56,23 @@
                         </li> --}}
                         <li>
                             <a href="{{ route('category#list') }} ">
-                                <i class="fas fa-list"></i>Category</a>
+                                <i class="fas fa-list"></i> Category
+                            </a>
                         </li>
                         <li>
                             <a href="{{ route('product#list') }} ">
-                                <i class="fas fa-list"></i>Products</a>
+                                <i class="fas fa-table"></i> Products
+                            </a>
                         </li>
                         <li>
-                            <a href="customerList.html">
-                                <i class="fas fa-chart-bar"></i>Customers</a>
+                            <a href="{{ route('order#list') }}">
+                                <i class="fas fa-cart-plus"></i> Orders
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('customer#list')}}">
+                                <i class="fas fa-users"></i> Customers
+                            </a>
                         </li>
                     </ul>
                 </nav>
@@ -140,7 +148,7 @@
                                                 <img src="@if (Auth::user()->gender == 'male') {{ asset('images/default/default-user-male.png') }}
                                                         @else
                                                         {{ asset('images/default/default-user-female.jpg') }} @endif "
-                                                        alt="">
+                                                    alt="">
                                             @endif
                                         </div>
                                         <div class="content">
@@ -224,6 +232,6 @@
     <script src="{{ asset('admin/js/main.js') }}"></script>
 
 </body>
-
+@yield('script')
 </html>
 <!-- end document-->

@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('tile', 'Product-List')
+@section('title', 'Product-List')
 @section('content')
     <div class="main-content">
         <div class="section__content section__content--p30">
@@ -21,7 +21,7 @@
                             </a>
                         </div>
                     </div>
-                    {{--   ALERT MESSAGE --}}
+                    <!--   ALERT MESSAGE -->
                     @if (session('message'))
                         <div class="col-12">
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -67,7 +67,7 @@
                                     @foreach ($products as $product)
                                         <tr class="tr-shadow">
                                             <td>
-                                                <div style="width: 40px;background-size:cover">
+                                                <div style="width:40px;background-size:cover">
                                                     <img src="{{ asset('storage/images/product/' . $product->image) }}"
                                                         alt="">
                                                 </div>

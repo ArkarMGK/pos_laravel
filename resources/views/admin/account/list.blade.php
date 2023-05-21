@@ -66,12 +66,14 @@
                                     <th>Phone</th>
                                     <th>Gender</th>
                                     <th>Address</th>
-                                    {{-- <th></th> --}}
+                                    <th>Role</th>
+                                    <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($users as $user)
-                                    <tr class="tr-shadow">
+                                    <tr class="tr-shadow dataRow">
+                                        <input type="hidden" value="{{ $user->id }}" class="userId">
                                         <td>
                                             <div style="width:40px;background-size: contain" class="img-thumbnail">
                                                 @if (isset($user->image))
@@ -91,17 +93,24 @@
                                         <td>{{ $user->gender }}</td>
                                         <td>{{ $user->address }}</td>
                                         <td>
+                                            @if ($user->id != Auth::user()->id)
+                                                <select name="role" id="" class="form-control userRole" title="Admin Role Change">
+                                                    <option value="admin"
+                                                        @if ($user->role == 'admin') selected @endif>Admin
+                                                    </option>
+                                                    <option value="user"
+                                                        @if ($user->role == 'user') selected @endif>User
+                                                    </option>
+                                                </select>
+                                            @else
+                                                Admin
+                                            @endif
+                                        </td>
+                                        <td>
                                             <div class="table-data-feature">
-                                                {{-- <a href="{{ route('user#edit', $user->id) }}">
-                                                        <button class="item" data-toggle="tooltip" data-placement="top"
-                                                            title="Edit">
-                                                            <i class="zmdi zmdi-edit"></i>
-                                                        </button>
-                                                    </a> --}}
-
                                                 @if (Auth::user()->id == $user->id)
                                                     <button class="item" data-toggle="tooltip" data-placement="top"
-                                                        title="Disabled">
+                                                        title="Current Admin Can't be deleted">
                                                         <i class="zmdi zmdi-delete"></i>
                                                     </button>
                                                 @else
@@ -112,8 +121,6 @@
                                                         </button>
                                                     </a>
                                                 @endif
-
-
                                             </div>
                                         </td>
                                     </tr>
@@ -131,4 +138,32 @@
         </div>
     </div>
     <!-- END MAIN CONTENT-->
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('.userRole').change(function() {
+                $role = $(this).val();
+                $parentNode = $(this).parents('.dataRow');
+                $userId = $parentNode.find('.userId').val();
+
+                console.log($userId);
+                console.log($role);
+                $.ajax({
+                    type: 'get',
+                    url: '/admin/ajax/user/role/change',
+                    data: {
+                        'user_id': $userId,
+                        'role': $role,
+                    },
+                    // dataType : 'json',
+
+                    success: function(response) {
+                        console.log(response);
+                    }
+                })
+                // location.reload();
+            })
+        })
+    </script>
 @endsection

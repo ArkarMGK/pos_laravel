@@ -15,6 +15,7 @@ class UserProductController extends Controller
     public function productDetails($id)
     {
         $product = Product::where('id', $id)->first();
+        // FOR CAROUSAL
         $products = Product::get();
         return view('user.product.details', compact('product', 'products'));
     }
@@ -25,7 +26,6 @@ class UserProductController extends Controller
             ->leftJoin('products', 'products.id', 'carts.product_id')
             ->where('user_id', Auth::user()->id)
             ->get();
-
         $totalAmount = 0;
         foreach ($carts as $item ) {
             $totalAmount += $item->price * $item->qty;

@@ -2,12 +2,15 @@
 
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\User\AjaxController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\UserAjaxController;
 use App\Http\Controllers\User\UserProductController;
 
 Route::middleware(['admin_auth'])->group(function () {
@@ -32,107 +35,154 @@ Route::middleware([
 
     Route::middleware(['admin_auth'])->group(function () {
         // Category
-        Route::group(['prefix' => 'category'], function () {
-            Route::get('list', [CategoryController::class, 'list'])->name(
-                'category#list'
-            );
-
-            Route::get('create', [
-                CategoryController::class,
-                'createPage',
-            ])->name('category#createPage');
-
-            Route::post('create', [CategoryController::class, 'store'])->name(
-                'category#create'
-            );
-
-            Route::get('delete/{id}', [
-                CategoryController::class,
-                'delete',
-            ])->name('category#delete');
-
-            Route::get('edit/{id}', [CategoryController::class, 'edit'])->name(
-                'category#edit'
-            );
-
-            Route::post('update/{id}', [
-                CategoryController::class,
-                'update',
-            ])->name('category#update');
-        });
         // Admin Password
         Route::prefix('admin')->group(function () {
             // Password
-            Route::get('password/changePage', [
-                AdminController::class,
-                'changePasswordPage',
-            ])->name('admin#changePasswordPage');
+            Route::group(['prefix' => 'category'], function () {
+                Route::get('list', [CategoryController::class, 'list'])->name(
+                    'category#list'
+                );
+                Route::get('create', [
+                    CategoryController::class,
+                    'createPage',
+                ])->name('category#createPage');
 
-            Route::post('password/change', [
-                AdminController::class,
-                'updatePassword',
-            ])->name('admin#updatePassword');
+                Route::post('create', [
+                    CategoryController::class,
+                    'store',
+                ])->name('category#create');
+
+                Route::get('delete/{id}', [
+                    CategoryController::class,
+                    'delete',
+                ])->name('category#delete');
+
+                Route::get('edit/{id}', [
+                    CategoryController::class,
+                    'edit',
+                ])->name('category#edit');
+
+                Route::post('update/{id}', [
+                    CategoryController::class,
+                    'update',
+                ])->name('category#update');
+            });
 
             // Account
-            Route::get('account/details', [
-                AdminController::class,
-                'accountDetails',
-            ])->name('admin#accountDetails');
+            Route::prefix('account')->group(function () {
+                Route::get('password/changePage', [
+                    AdminController::class,
+                    'changePasswordPage',
+                ])->name('admin#changePasswordPage');
 
-            Route::get('account/edit', [
-                AdminController::class,
-                'accountEdit',
-            ])->name('admin#accountEdit');
+                Route::post('password/change', [
+                    AdminController::class,
+                    'updatePassword',
+                ])->name('admin#updatePassword');
 
-            Route::post('account/update/{id}', [
-                AdminController::class,
-                'accountUpdate',
-            ])->name('admin#accountUpdate');
+                Route::get('details', [
+                    AdminController::class,
+                    'accountDetails',
+                ])->name('admin#accountDetails');
 
-            // Account List
-            Route::get('list', [AdminController::class, 'list'])->name(
-                'admin#accountList'
-            );
+                Route::get('edit', [
+                    AdminController::class,
+                    'accountEdit',
+                ])->name('admin#accountEdit');
 
-            // Delete account
-            Route::get('delete/{id}', [AdminController::class, 'delete'])->name(
-                'admin#accountDelete'
-            );
-        });
+                Route::post('update/{id}', [
+                    AdminController::class,
+                    'accountUpdate',
+                ])->name('admin#accountUpdate');
 
-        // Product
-        Route::prefix('product')->group(function () {
-            Route::get('list', [ProductController::class, 'list'])->name(
-                'product#list'
-            );
+                // Account List
+                Route::get('list', [AdminController::class, 'list'])->name(
+                    'admin#accountList'
+                );
 
-            Route::get('create', [ProductController::class, 'create'])->name(
-                'product#createPage'
-            );
+                // Delete account
+                Route::get('delete/{id}', [
+                    AdminController::class,
+                    'delete',
+                ])->name('admin#accountDelete');
+            });
 
-            Route::post('store', [ProductController::class, 'store'])->name(
-                'product#store'
-            );
+            // Product
+            Route::prefix('product')->group(function () {
+                Route::get('list', [ProductController::class, 'list'])->name(
+                    'product#list'
+                );
 
-            Route::get('show/{id}', [ProductController::class, 'show'])->name(
-                'product#show'
-            );
+                Route::get('create', [
+                    ProductController::class,
+                    'create',
+                ])->name('product#createPage');
 
-            Route::get('edit/{id}', [ProductController::class, 'edit'])->name(
-                'product#edit'
-            );
+                Route::post('store', [ProductController::class, 'store'])->name(
+                    'product#store'
+                );
 
-            Route::post('update/{id}', [
-                ProductController::class,
-                'update',
-            ])->name('product#update');
-            Route::get('delete/{id}', [
-                ProductController::class,
-                'delete',
-            ])->name('product#delete');
+                Route::get('show/{id}', [
+                    ProductController::class,
+                    'show',
+                ])->name('product#show');
+
+                Route::get('edit/{id}', [
+                    ProductController::class,
+                    'edit',
+                ])->name('product#edit');
+
+                Route::post('update/{id}', [
+                    ProductController::class,
+                    'update',
+                ])->name('product#update');
+                Route::get('delete/{id}', [
+                    ProductController::class,
+                    'delete',
+                ])->name('product#delete');
+            });
+
+            Route::prefix('order')->group(function () {
+                Route::get('list', [OrderController::class, 'orderList'])->name(
+                    'order#list'
+                );
+                Route::get('status', [
+                    OrderController::class,
+                    'viewByOrderStatus',
+                ])->name('order#status');
+
+                Route::get('orderCode/{code}', [
+                    OrderController::class,
+                    'showOrderDetails',
+                ])->name('order#orderCode');
+            });
+
+            Route::prefix('customer')->group(function () {
+                Route::get('list', [CustomerController::class, 'list'])->name(
+                    'customer#list'
+                );
+            });
+            // Ajax
+            Route::prefix('ajax')->group(function () {
+                // Route::get('order/status', [
+                //     AjaxController::class,
+                //     'viewOrderByStatus',
+                // ]);
+
+                Route::get('order/status/change', [
+                    AjaxController::class,
+                    'changeOrderStatus',
+                ]);
+
+                Route::get('user/role/change', [
+                    AjaxController::class,
+                    'changeUserRole',
+                ]);
+            });
         });
     });
 
+    // USER SITE
     Route::group(
         ['prefix' => 'user', 'middleware' => 'user_auth'],
         function () {
@@ -144,23 +194,37 @@ Route::middleware([
                 'user#filter'
             );
 
+            Route::get('history', [UserController::class, 'history'])->name(
+                'user#history'
+            );
+
+            Route::get('contact/us', [
+                UserController::class,
+                'contactUs',
+            ])->name('user#contactUs');
+
+            Route::post('contact/messaage', [
+                UserController::class,
+                'saveContactMessage',
+            ])->name('user#contactUsMessage');
+
             // USER ACCOUNTS OPERATIONS
-            Route::get('password/change', [
+            Route::get('change', [
                 UserController::class,
                 'changePasswordPage',
             ])->name('user#changePasswordPage');
 
-            Route::post('password/change', [
+            Route::post('change', [
                 UserController::class,
                 'updatePassword',
             ])->name('user#updatePassword');
 
-            Route::get('account/edit', [
+            Route::get('edit', [
                 UserController::class,
                 'accountEditPage',
             ])->name('user#accountEdit');
 
-            Route::post('account/update/{id}', [
+            Route::post('update/{id}', [
                 UserController::class,
                 'updateAccount',
             ])->name('user#accountUpdate');
@@ -174,19 +238,34 @@ Route::middleware([
                 Route::get('cart', [
                     UserProductController::class,
                     'cartList',
-                ])->name('user#Cart');
-
+                ])->name('user#cart');
             });
 
             Route::prefix('ajax')->group(function () {
                 Route::get('product/list', [
-                    AjaxController::class,
+                    UserAjaxController::class,
                     'productList',
-                ])->name('ajax#productList');
+                ])->name('user#ajax#productList');
 
-                Route::get('addToCart', [AjaxController::class, 'addToCart'])->name(
-                    'ajax#addToCart'
-                );
+                Route::get('product/increase/viewCount', [
+                    UserAjaxController::class,
+                    'increaseProductViewCount',
+                ]);
+
+                Route::get('addToCart', [
+                    UserAjaxController::class,
+                    'addToCart',
+                ])->name('user#ajax#addToCart');
+
+                Route::get('order', [
+                    UserAjaxController::class,
+                    'addOrder',
+                ])->name('user#ajax#order');
+
+                Route::get('clear/cart', [
+                    UserAjaxController::class,
+                    'clearCart',
+                ])->name('user#ajax#clearCart');
             });
         }
     );

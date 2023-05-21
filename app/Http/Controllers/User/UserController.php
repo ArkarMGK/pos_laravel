@@ -5,6 +5,8 @@ namespace App\Http\Controllers\User;
 use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\Contact;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -16,22 +18,74 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    //
+    // UserSite Landing Page
     public function homePage()
     {
         $categories = Category::get();
         $products = Product::latest()->get();
-        $carts   = Cart::where('user_id', Auth::user()->id)->get();
-        return view('user.home', compact('products', 'categories', 'carts'));
+        $carts = Cart::where('user_id', Auth::user()->id)->get();
+        $orders = Order::where('user_id', Auth::user()->id)->get();
+        return view(
+            'user.home',
+            compact('products', 'categories', 'carts', 'orders')
+        );
     }
 
     public function filter($categoryId)
     {
         $categories = Category::get();
-        $products = Product::where('category_id', $categoryId)->latest()->get();
-        return view('user.home', compact('products', 'categories'));
+
+        if ($categoryId != 'all') {
+            $products = Product::where('category_id', $categoryId)->latest();
+        } else {
+            $products = Product::latest();
+        }
+        $products = $products->get();
+        $carts = Cart::where('user_id', Auth::user()->id)->get();
+        $orders = Order::where('user_id', Auth::user()->id)->get();
+        return view(
+            'user.home',
+            compact('products', 'categories', 'carts', 'orders')
+        );
     }
 
+    // User-Site Order History Page
+    public function history()
+    {
+        $orders = Order::where('user_id', Auth::user()->id)
+            ->latest()
+            ->paginate(3);
+        return view('user.product.history', compact('orders'));
+    }
+
+    // User-Site Contact Us Page
+    public function contactUs()
+    {
+        return view('user.contact');
+    }
+
+    public function saveContactMessage(Request $request)
+    {
+        $this->messageValidationCheck($request);
+        Contact::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'message' => $request->message,
+        ]);
+        return redirect()->route('user#home')->with([
+            'message' => 'Your Message Has Been Sent !',
+        ]);
+    }
+
+    private function messageValidationCheck($request)
+    {
+        Validator::make($request->all(), [
+            'name' => 'required|min:3|max:12',
+            'email' => 'required|email',
+            'message' => 'required|min:10',
+        ])->validate();
+    }
+    // User-Site Password Reset
     public function changePasswordPage()
     {
         return view('user.account.changePassword');
@@ -69,7 +123,7 @@ class UserController extends Controller
         ])->validate();
     }
 
-    // Account Edit
+    // User-Site Account Edit
     public function accountEditPage()
     {
         return view('user.account.edit');
@@ -104,9 +158,9 @@ class UserController extends Controller
         Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email',
-            'gender' => 'required',
-            'phone' => 'required',
-            'address' => 'required',
+            // 'gender' => 'required',
+            // 'phone' => 'required',
+            // 'address' => 'required',
             'image' => 'mimes:png,jpg,jpeg|file',
         ])->validate();
     }

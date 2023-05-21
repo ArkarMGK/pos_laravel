@@ -18,6 +18,8 @@
                     <tbody class="align-middle">
                         @foreach ($carts as $item)
                             <tr>
+                                <input type="hidden" class="userId" value="{{ Auth::user()->id }}">
+                                <input type="hidden" class="productId" value="{{ $item->id }}">
                                 <td class="align-middle">
                                     <div class="row d-flex align-items-center">
                                         <div class="col-6"> <img
@@ -66,7 +68,7 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Delivary</h6>
-                            <h6 class="font-weight-medium">1000 MMK</h6>
+                            <h6 class="font-weight-medium" id="delivary">1000 MMK</h6>
                         </div>
                     </div>
                     <div class="pt-2">
@@ -74,7 +76,11 @@
                             <h5>Total</h5>
                             <h5 id="grandTotal">{{ $totalAmount + 1000 }} MMK</h5>
                         </div>
-                        <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button>
+                        <button class="btn btn-block btn-primary font-weight-bold my-3 py-3" id="btnCheckOut">Proceed To
+                            Checkout</button>
+
+                        <button class="btn btn-block btn-danger font-weight-bold my-3 py-3" id="btnClearAll">Clear All
+                            </button>
                     </div>
                 </div>
             </div>
@@ -85,4 +91,48 @@
 @section('script')
     {{-- PURE JS --}}
     <script src="{{ asset('js/cart.js') }}"></script>
+    <script>
+        $('document').ready(function() {
+            $('#btnCheckOut').click(function() {
+                // UserId with Timestamp
+                $orderCode = $('.userId').val() + "POS" + Date.now().toString();
+                $orderList = [];
+                $('#dataTable tbody tr').each(function(index, row) {
+                    $orderList.push({
+                        'user_id': $(row).find('.userId').val(),
+                        'product_id': $(row).find('.productId').val(),
+                        'qty': $(row).find('#qty').val(),
+                        'total': $(row).find('.total').text().replace('MMK', '') * 1,
+                        'order_code': $orderCode,
+                    });
+                });
+                $.ajax({
+                    type: 'get',
+                    url: '/user/ajax/order',
+                    // JSON OBJECT FORMAT
+                    data: Object.assign({}, $orderList),
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status == 'success') {
+                            window.location.href = "/user/home"
+                        }
+                    }
+                })
+            })
+
+            $('#btnClearAll').click(function() {
+                $.ajax({
+                    type : 'get',
+                    url : '/user/ajax/clear/cart',
+                    dataType : 'json',
+                })
+
+                $('#dataTable tbody tr').remove();
+                $('#subTotal').html("0 MMK");
+                $('#delivary').html("0 MMK");
+                $('#grandTotal').html("0 MMK");
+
+            })
+        })
+    </script>
 @endsection

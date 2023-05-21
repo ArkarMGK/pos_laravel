@@ -124,9 +124,21 @@
 @section('script')
     <script>
         $(document).ready(function() {
+            // INCREASE VIEW COUNT AS ENTER THE DETAILS PAGE
+            $.ajax({
+                type: 'get',
+                url: '/user/ajax/product/increase/viewCount',
+                data: {
+                    'id': $('#productId').val()
+                }
+                // success: function(response){
+                //     console.log(response);
+                // }
+            })
+
             $('#addCartBtn').click(function() {
                 $source = {
-                    'count': $('#orderCount').val(),
+                    'qty': $('#orderCount').val(),
                     'user_id': $('#userId').val(),
                     'product_id': $('#productId').val(),
                 };
@@ -134,19 +146,16 @@
                 console.log($source);
                 $.ajax({
                     type: 'get',
-                    url: 'http://localhost:8000/user/ajax/addToCart',
+                    url: '/user/ajax/addToCart',
                     data: $source,
                     dataType: 'json',
                     success: function(response) {
-                        if(response.status == 'success'){
-                            window.location.href = "http://localhost:8000/user/home";
+                        if (response.status == 'success') {
+                            window.location.href = "/user/home";
                         }
                     }
                 })
             })
-
-
-
         })
     </script>
 @endsection
